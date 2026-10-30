@@ -231,5 +231,10 @@ document.querySelectorAll('.tabs button').forEach(btn=>{btn.onclick=()=>{documen
 document.getElementById('miniPlayer').onclick=()=>{document.getElementById('fullPlayer').classList.add('show');};
 document.getElementById('closeFull').onclick=()=>{document.getElementById('fullPlayer').classList.remove('show');};
 </script>
+<script>
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('sw.js');
+}
+</script>
 </body>
 </html>

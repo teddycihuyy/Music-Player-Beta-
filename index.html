@@ -54,8 +54,10 @@ body{background:var(--bg);color:var(--text);display:flex;justify-content:center}
 .full-info .text{flex:1;min-width:0}
 .full-info h2{font-size:16px;font-weight:700;line-height:1.3;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .full-info p{font-size:13px;color:rgba(255,255,255,.6);margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.like-btn{width:44px;height:44px;border-radius:50%;border:1px solid rgba(255,255,255,.15);background:rgba(255,255,255,.08);color:#fff;display:grid;place-items:center;cursor:pointer;flex-shrink:0;transition:.2s}
-.like-btn.liked{background:var(--accent);border-color:var(--accent);color:#fff}
+.like-btn{width:48px;height:48px;border-radius:50%;border:1px solid rgba(255,255,255,.18);background:rgba(255,255,255,.08);color:#fff;display:grid;place-items:center;cursor:pointer;flex-shrink:0}
+.like-btn svg{width:24px;height:24px;display:block}
+.like-btn.liked{background:#ff2a6d;border-color:#ff2a6d;color:#fff}
+.like-btn.liked svg{fill:#fff;stroke:#fff}
 .full-lyrics{flex:1;overflow:auto;margin:14px 16px 0;background:rgba(255,255,255,0.04);backdrop-filter:blur(20px);border-radius:18px;padding:16px;border:1px solid rgba(255,255,255,.08)}
 .full-lyrics pre{white-space:pre-wrap;font-size:13px;line-height:1.7;color:#ccc;font-family:Inter,sans-serif}
 .modal{position:fixed;inset:0;background:rgba(0,0,0,.85);z-index:200;display:none;place-items:end center}
@@ -84,7 +86,9 @@ body{background:var(--bg);color:var(--text);display:flex;justify-content:center}
 <div class="full-cover"><img id="fullCover"></div>
 <div class="full-info">
   <div class="text"><h2 id="fullTitle">Music</h2><p id="fullCh">-</p></div>
-  <button id="fullLike" class="like-btn"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.8 4.6c-1.5-1.5-4-1.5-5.5 0l-1.3 1.3-1.3-1.3c-1.5-1.5-4-1.5-5.5 0-1.5 1.5-1.5 4 0 5.5l8 8 8-8c1.5-1.5 1.5-4 0-5.5z"/></svg></button>
+  <button id="fullLike" class="like-btn">
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19.5 12.5c0 5-7.5 8.5-7.5 8.5S4.5 17.5 4.5 12.5c0-2.5 2-4.5 4.5-4.5 1.5 0 3 1 3 1s1.5-1 3-1c2.5 0 4.5 2 4.5 4.5z"/></svg>
+  </button>
 </div>
 <div class="full-lyrics"><pre id="fullLyrics">Lirik tidak tersedia</pre></div>
 <div style="padding:16px 20px 30px;border-top:1px solid rgba(255,255,255,.06);margin-top:14px"><div class="seek-wrap"><span id="fullCurTime">0:00</span><input type="range" id="fullSeek" min="0" max="100" value="0"><span id="fullDurTime">0:00</span></div><div class="controls"><button id="fullPrev"><svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M6 6h2v12H6zM9.5 12 18 6v12z"/></svg></button><button class="play" id="fullPlay"><svg id="fullPlayIcon" width="26" height="26" viewBox="0 0 24 24" fill="white"><path d="M8 5.14v14l11-7z"/></svg></button><button id="fullNext"><svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M16 6h2v12h-2zM6 6v12l8.5-6z"/></svg></button></div></div>
@@ -115,10 +119,13 @@ function toggleLike(song){
 function updateLikeUI(){
   const cur=playQueue[idx];
   const liked=cur?isLiked(cur.id):false;
-  document.getElementById('fullLike').classList.toggle('liked',liked);
-  document.getElementById('fullLike').innerHTML=liked?'<svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M20.8 4.6c-1.5-1.5-4-1.5-5.5 0l-1.3 1.3-1.3-1.3c-1.5-1.5-4-1.5-5.5 0-1.5 1.5-1.5 4 0 5.5l8 8 8-8c1.5-1.5 1.5-4 0-5.5z"/></svg>':'<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.8 4.6c-1.5-1.5-4-1.5-5.5 0l-1.3 1.3-1.3-1.3c-1.5-1.5-4-1.5-5.5 0-1.5 1.5-1.5 4 0 5.5l8 8 8-8c1.5-1.5 1.5-4 0-5.5z"/></svg>';
-  document.getElementById('miniLike').style.color=liked?'var(--accent)':'#666';
-}
+  const btn=document.getElementById('fullLike');
+  btn.classList.toggle('liked',liked);
+  btn.innerHTML=liked
+    ? '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 21s-7-4.35-8.5-7.5C1.5 10.5 4 6.5 8.5 7.5c2 .5 3.5 2 3.5 3.5 0-1.5 1.5-3 3.5-3.5 4.5-1 7 3 5 6.5C19 16.65 12 21 12 21z"/></svg>'
+    : '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19.5 12.5c0 5-7.5 8.5-7.5 8.5S4.5 17.5 4.5 12.5c0-2.5 2-4.5 4.5-4.5 1.5 0 3 1 3 1s1.5-1 3-1c2.5 0 4.5 2 4.5 4.5z"/></svg>';
+  document.getElementById('miniLike').style.color=liked?'#ff2a6d':'#666';
+  }
 function renderChips(){const c=document.getElementById('playlistChips');c.innerHTML='';playlists.forEach(pl=>{const d=document.createElement('div');d.className='chip'+(pl.id===activePlaylistId?' active':'');d.textContent=pl.name+' ('+pl.songs.length+')';d.onclick=()=>{activePlaylistId=pl.id;save();renderChips();if(tab==='queue')renderQueue();};c.appendChild(d);});}
 function formatTime(s){s=Math.floor(s||0);const m=Math.floor(s/60);const sec=s%60;return m+":"+(sec<10?"0"+sec:sec);}
 function onYouTubeIframeAPIReady(){

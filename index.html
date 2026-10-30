@@ -3,14 +3,15 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Music vFINAL-11</title>
+<title>Music</title>
 <style>
 :root{--bg:#070707;--card:#141414;--accent:#ff2a6d;--text:#fff;--muted:#888}
-*{box-sizing:border-box;margin:0;padding:0;font-family:Inter,sans-serif}
+*{box-sizing:border-box;margin:0;padding:0;font-family:Inter,sans-serif;-webkit-tap-highlight-color:transparent}
 body{background:var(--bg);color:var(--text);display:flex;justify-content:center}
-.phone{width:100%;max-width:420px;min-height:100dvh;background:var(--bg);display:flex;flex-direction:column}
-.header{padding:20px 16px 10px;display:flex;justify-content:space-between;align-items:center;position:relative;z-index:50}
-.icon-btn{width:42px;height:42px;border-radius:12px;border:1px solid #222;background:#141414;display:grid;place-items:center;color:#fff;cursor:pointer}
+.phone{width:100%;max-width:420px;min-height:100dvh;background:var(--bg);display:flex;flex-direction:column;position:relative}
+.header{padding:20px 16px 10px;display:flex;justify-content:space-between;align-items:center;z-index:30}
+.header b{font-size:22px;font-weight:800}
+.icon-btn{width:40px;height:40px;border-radius:12px;border:1px solid #222;background:#141414;display:grid;place-items:center;color:#fff;cursor:pointer}
 .search{padding:8px 16px 10px;position:sticky;top:0;background:var(--bg);z-index:10}
 .search-box{display:flex;gap:10px;background:#141414;border:1px solid #222;border-radius:16px;padding:14px 16px}
 .search-box input{flex:1;background:transparent;border:0;color:#fff;outline:none;font-size:14px}
@@ -18,48 +19,53 @@ body{background:var(--bg);color:var(--text);display:flex;justify-content:center}
 .tabs{display:flex;gap:8px;margin:12px 0}
 .tabs button{padding:9px 16px;border-radius:22px;border:1px solid #2a2a2a;background:#111;color:#888;font-size:13px;font-weight:600;cursor:pointer}
 .tabs button.active{background:#fff;color:#000}
-.playlist-chips{display:flex;gap:8px;margin:8px 0 12px;overflow-x:auto}
-.chip{padding:8px 14px;border-radius:20px;background:#1a1a1a;border:1px solid #333;color:#ccc;font-size:12px;white-space:nowrap;display:flex;align-items:center;gap:6px;cursor:pointer}
+.playlist-chips{display:flex;gap:8px;margin:8px 0 12px;overflow-x:auto;padding-bottom:4px}
+.chip{padding:8px 14px;border-radius:20px;background:#1a1a1a;border:1px solid #333;color:#ccc;font-size:12px;white-space:nowrap;cursor:pointer}
 .chip.active{background:var(--accent);border-color:var(--accent);color:#fff}
 .list{display:grid;gap:10px}
-.song{display:flex;gap:12px;padding:12px;border-radius:18px;background:var(--card);align-items:center;cursor:pointer}
-.song.active{border:1px solid var(--accent);background:#22111a}
-.song img{width:56px;height:56px;border-radius:14px;background:#222}
+.song{display:flex;gap:12px;padding:12px;border-radius:18px;background:var(--card);align-items:center;cursor:pointer;border:1px solid transparent}
+.song.active{border-color:var(--accent);background:#22111a}
+.song img{width:56px;height:56px;border-radius:14px;background:#222;flex-shrink:0;object-fit:cover}
 .song .info{flex:1;min-width:0}
-.song b{font-size:13px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
-.song span{font-size:11px;color:var(--muted)}
-.song .more{width:32px;height:32px;border-radius:50%;background:transparent;border:0;color:#888;display:grid;place-items:center;cursor:pointer}
-.player-bar{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:420px;background:rgba(18,18,18,0.98);border-top:1px solid #222;padding:12px 16px 18px;border-radius:24px 24px 0 0;z-index:20}
+.song b{font-size:13px;line-height:1.3;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.song span{font-size:11px;color:var(--muted);margin-top:3px;display:block}
+.song .more{width:32px;height:32px;border-radius:50%;background:transparent;border:0;color:#888;display:grid;place-items:center;cursor:pointer;flex-shrink:0}
+.player-bar{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:420px;background:rgba(18,18,18,0.98);backdrop-filter:blur(24px);border-top:1px solid #222;padding:12px 16px 18px;border-radius:24px 24px 0 0;z-index:20}
+.mini-top{display:flex;gap:12px;align-items:center;cursor:pointer}
+.mini-cover{width:48px;height:48px;border-radius:12px;overflow:hidden;background:#000}
+.mini-cover img{width:100%;height:100%;object-fit:cover}
+.controls{display:flex;justify-content:space-between;align-items:center;margin-top:12px;padding:0 20px}
+.controls button{width:44px;height:44px;border-radius:50%;border:0;background:transparent;color:#fff;display:grid;place-items:center;cursor:pointer}
+.controls button.play{width:58px;height:58px;background:var(--accent)}
+#fullPlayer{position:fixed;bottom:0;left:50%;transform:translateX(-50%) translateY(100%);width:100%;max-width:420px;height:100dvh;background:#0a0a0a;z-index:100;transition:transform .4s ease;display:flex;flex-direction:column}
+#fullPlayer.show{transform:translateX(-50%) translateY(0)}
+#fullBg{position:absolute;inset:0;z-index:-1;filter:blur(60px) brightness(.5);transform:scale(1.5);background:#111}
+.full-top{padding:20px 16px;display:flex;justify-content:space-between;align-items:center}
+.full-cover{margin:10px 20px;aspect-ratio:1;border-radius:28px;overflow:hidden;background:#111}
+.full-cover img{width:100%;height:100%;object-fit:cover}
 .modal{position:fixed;inset:0;background:rgba(0,0,0,.85);z-index:200;display:none;place-items:end center}
 .modal.show{display:grid}
 .modal#newModal{z-index:500;place-items:center center}
 .sheet{width:100%;max-width:420px;background:#181818;border-radius:28px 28px 0 0;padding:20px 16px 30px;border-top:1px solid #333}
-.sheet-item{padding:14px 12px;border-radius:12px;display:flex;gap:12px;align-items:center;background:transparent;border:0;color:#fff;width:100%;font-size:14px;cursor:pointer}
+.sheet-item{padding:14px 12px;border-radius:12px;display:flex;gap:12px;align-items:center;background:transparent;border:0;color:#fff;width:100%;text-align:left;font-size:14px;cursor:pointer}
 .box{width:100%;max-width:360px;background:#111;border:1px solid #333;border-radius:20px;padding:18px}
 .box input{width:100%;background:#1a1a1a;border:1px solid #333;border-radius:10px;padding:12px;color:#fff;margin:10px 0}
 .box .btn{width:100%;padding:12px;border-radius:12px;border:0;background:var(--accent);color:#fff;font-weight:700;margin-top:8px;cursor:pointer}
 .playlist-option{padding:12px;border-radius:12px;background:#1a1a1a;border:1px solid #333;margin-bottom:8px;display:flex;justify-content:space-between;align-items:center;cursor:pointer}
-#fullPlayer{position:fixed;inset:0;z-index:100;display:flex;flex-direction:column;transform:translateY(100%);transition:transform .4s;max-width:420px;left:50%;transform:translateX(-50%) translateY(100%)}
-#fullPlayer.show{transform:translateX(-50%) translateY(0)}
-#fullBg{position:absolute;inset:0;z-index:-1;filter:blur(60px) brightness(.6);transform:scale(1.5);background:#111}
-.full-cover{margin:10px 20px;aspect-ratio:1;border-radius:28px;overflow:hidden;background:#111}
-.full-cover img{width:100%;height:100%;object-fit:cover}
 </style>
 </head>
 <body>
 <div class="phone">
-<div class="header"><b>Music vFINAL-11</b><button class="icon-btn" id="newPlaylistBtn" onclick="document.getElementById('newModal').classList.add('show');document.getElementById('newModal').style.display='grid'" style="font-size:22px;font-weight:800">+</button></div>
-<div class="search"><div class="search-box"><input id="q" placeholder="Cari lagu... teh hijau"><button id="go" style="background:var(--accent);border:0;color:#fff;font-weight:700;padding:7px 14px;border-radius:10px;cursor:pointer">GO</button></div></div>
-<div class="main"><div class="tabs"><button class="active" data-tab="search">Search</button><button data-tab="queue">Playlist</button></div><div id="playlistChips" class="playlist-chips" style="display:none"></div><div class="list" id="result"></div></div>
-<div class="player-bar"><div class="mini-top" id="miniPlayer"><div class="mini-cover" style="width:48px;height:48px;border-radius:12px;overflow:hidden;background:#000"><img id="cover" style="width:100%;height:100%;object-fit:cover"></div><div style="flex:1"><h3 id="title" style="font-size:13px">Music</h3><p id="ch" style="font-size:11px;color:#888">Cari lagu</p></div></div><input type="range" id="seek" min="0" max="100" value="0" style="width:100%"><div class="controls" style="display:flex;justify-content:space-around;margin-top:10px"><button id="prev">⏮</button><button class="play" id="play" style="width:58px;height:58px;background:var(--accent);border-radius:50%;border:0;color:#fff">▶</button><button id="next">⏭</button></div></div>
+<div class="header"><b>Music</b><button class="icon-btn" id="newPlaylistBtn"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg></button></div>
+<div class="search"><div class="search-box"><input id="q" placeholder="Cari lagu..."><button id="go" style="background:var(--accent);border:0;color:#fff;font-weight:700;padding:7px 14px;border-radius:10px;cursor:pointer">GO</button></div></div>
+<div class="main"><div class="tabs"><button class="active" data-tab="search">Search</button><button data-tab="queue">Playlist</button></div><div id="playlistChips" class="playlist-chips" style="display:none"></div><div class="list" id="result"><div style="text-align:center;color:#555;padding:40px">Ketik "teh hijau" terus GO</div></div></div>
+<div class="player-bar"><div class="mini-top" id="miniPlayer"><div class="mini-cover"><img id="cover"></div><div style="flex:1;min-width:0"><h3 id="title" style="font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Music</h3><p id="ch" style="font-size:11px;color:#888">Cari lagu</p></div></div><input type="range" id="seek" min="0" max="100" value="0" style="width:100%;margin-top:12px;accent-color:var(--accent)"><div class="controls"><button id="prev"><svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M6 6h2v12H6zM9.5 12 18 6v12z"/></svg></button><button class="play" id="play"><svg id="playIcon" width="26" height="26" viewBox="0 0 24 24" fill="white"><path d="M8 5.14v14l11-7z"/></svg></button><button id="next"><svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M16 6h2v12h-2zM6 6v12l8.5-6z"/></svg></button></div></div>
 </div>
-
-<div id="fullPlayer"><div id="fullBg"></div><div style="padding:20px;display:flex;justify-content:space-between"><button id="closeFull" class="icon-btn">↓</button><b>Now Playing</b><div style="width:38px"></div></div><div class="full-cover"><img id="fullCover"></div><div style="padding:0 24px"><h2 id="fullTitle">Music</h2><p id="fullCh">-</p><pre id="fullLyrics" style="margin-top:20px;background:rgba(0,0,0,.35);padding:16px;border-radius:20px;white-space:pre-wrap">Cari lagu dulu...</pre></div></div>
-
-<div class="modal" id="moreModal"><div class="sheet"><div id="moreTitle"></div><button class="sheet-item" id="actionPlay">▶ Putar Sekarang</button><button class="sheet-item" id="actionAdd">+ Tambah ke Playlist</button><button class="sheet-item" id="actionLike">♥ Suka</button><button class="sheet-item" id="actionDelete" style="color:#ff5a5a;display:none">Hapus</button><button class="sheet-item" onclick="document.getElementById('moreModal').classList.remove('show')">Batal</button></div></div>
-<div class="modal" id="playlistModal"><div class="sheet"><h3>Pilih Playlist</h3><div id="playlistOptions" style="margin-top:12px"></div><button class="sheet-item" id="closePlaylistModal">Batal</button></div></div>
-<div class="modal" id="newModal"><div class="box"><h3>Buat Playlist Baru</h3><input id="newName" placeholder="Ex: Galau"><button class="btn" id="createPlaylist">Buat</button><button class="btn" id="closeNew" style="background:#222">Batal</button></div></div>
-<div id="yt-player" style="position:absolute;left:-9999px;width:1px;height:1px"></div>
+<div id="fullPlayer"><div id="fullBg"></div><div class="full-top"><button id="closeFull" class="icon-btn"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m6 9 6 6 6-6"/></svg></button><b>Now Playing</b><div style="width:40px"></div></div><div class="full-cover"><img id="fullCover"></div><div style="padding:0 24px;margin-top:14px"><h2 id="fullTitle" style="font-size:20px">Music</h2><p id="fullCh" style="font-size:13px;color:rgba(255,255,255,.7)">-</p><pre id="fullLyrics" style="margin-top:16px;background:rgba(0,0,0,.35);backdrop-filter:blur(20px);border-radius:20px;padding:16px;white-space:pre-wrap;font-size:14px;line-height:1.8;border:1px solid rgba(255,255,255,.1)">Cari lagu dulu...</pre></div><div style="padding:16px 24px 30px"><input type="range" id="fullSeek" min="0" max="100" value="0" style="width:100%;accent-color:var(--accent)"><div class="controls"><button id="fullPrev"><svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M6 6h2v12H6zM9.5 12 18 6v12z"/></svg></button><button class="play" id="fullPlay"><svg id="fullPlayIcon" width="26" height="26" viewBox="0 0 24 24" fill="white"><path d="M8 5.14v14l11-7z"/></svg></button><button id="fullNext"><svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M16 6h2v12h-2zM6 6v12l8.5-6z"/></svg></button></div></div></div>
+<div class="modal" id="moreModal"><div class="sheet"><div style="width:40px;height:4px;background:#333;border-radius:10px;margin:0 auto 16px"></div><div style="display:flex;gap:12px;margin-bottom:16px"><img id="moreCover" style="width:52px;height:52px;border-radius:12px"><div><b id="moreTitle" style="font-size:14px"></b><p id="moreCh" style="font-size:11px;color:#888"></p></div></div><button class="sheet-item" id="actionPlay"><svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5.14v14l11-7z"/></svg> Putar Sekarang</button><button class="sheet-item" id="actionAdd"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg> Tambah ke Playlist</button><button class="sheet-item" id="actionDelete" style="color:#ff5a5a;display:none">Hapus dari Playlist</button><button class="sheet-item" onclick="document.getElementById('moreModal').classList.remove('show')" style="color:#888">Batal</button></div></div>
+<div class="modal" id="playlistModal"><div class="sheet"><h3>Pilih Playlist</h3><div id="playlistOptions" style="margin-top:12px"></div><button class="sheet-item" id="closePlaylistModal" style="color:#888">Batal</button></div></div>
+<div class="modal" id="newModal"><div class="box"><h3>Buat Playlist Baru</h3><input id="newName" placeholder="Ex: Galau, Workout"><button class="btn" id="createPlaylist">Buat</button><button class="btn" id="closeNew" style="background:#222">Batal</button></div></div>
+<div id="yt-player" style="position:absolute;left:-9999px;width:1px;height:1px;opacity:0"></div>
 <script src="https://www.youtube.com/iframe_api"></script>
 <script>
 const API_KEY='AIzaSyCuKx7zWsOGiyegFVsS35Yr77NYtLgyY34';
@@ -71,31 +77,33 @@ const resultEl=document.getElementById('result');
 function save(){localStorage.setItem('playlists',JSON.stringify(playlists));localStorage.setItem('activePlaylistId',activePlaylistId);}
 function getActive(){return playlists.find(p=>p.id===activePlaylistId)||playlists[0];}
 function renderChips(){const c=document.getElementById('playlistChips');c.innerHTML='';playlists.forEach(pl=>{const d=document.createElement('div');d.className='chip'+(pl.id===activePlaylistId?' active':'');d.textContent=pl.name+' ('+pl.songs.length+')';d.onclick=()=>{activePlaylistId=pl.id;save();renderChips();if(tab==='queue')renderQueue();};c.appendChild(d);});}
-function onYouTubeIframeAPIReady(){player=new YT.Player('yt-player',{height:'1',width:'1',videoId:'',playerVars:{playsinline:1},events:{onReady:()=>{player.setVolume(80)},onStateChange:e=>{if(e.data==0)next();}}});renderChips();}
-function renderSearch(items){cacheResults=items;resultEl.innerHTML='';items.forEach((s,i)=>{const d=document.createElement('div');d.className='song';d.innerHTML=`<img src="https://img.youtube.com/vi/${s.id}/mqdefault.jpg"><div class=info><b>${s.title}</b><span>${s.ch}</span></div><button class=more data-more="${i}" data-from="search">⋯</button>`;d.onclick=(e)=>{if(e.target.closest('.more'))return;playQueue=cacheResults;idx=i;playFromQueue();};resultEl.appendChild(d);});document.getElementById('playlistChips').style.display='none';}
-function renderQueue(){const pl=getActive();resultEl.innerHTML='';if(!pl.songs.length)resultEl.innerHTML=`<div style="text-align:center;color:#555;padding:40px">Kosong</div>`;else pl.songs.forEach((s,i)=>{const d=document.createElement('div');d.className='song';d.innerHTML=`<img src="https://img.youtube.com/vi/${s.id}/mqdefault.jpg"><div class=info><b>${s.title}</b><span>${s.ch}</span></div><button class=more data-more="${i}" data-from="queue">⋯</button>`;d.onclick=(e)=>{if(e.target.closest('.more'))return;playQueue=pl.songs;idx=i;playFromQueue();};resultEl.appendChild(d);});document.getElementById('playlistChips').style.display='flex';renderChips();}
-resultEl.addEventListener('click',e=>{const btn=e.target.closest('.more');if(!btn)return;const i=+btn.dataset.more;const from=btn.dataset.from;moreFrom=from;moreIndex=i;moreSong=from==='search'?cacheResults[i]:getActive().songs[i];document.getElementById('moreTitle').textContent=moreSong.title;document.getElementById('actionDelete').style.display=from==='queue'?'flex':'none';document.getElementById('moreModal').classList.add('show');});
+function onYouTubeIframeAPIReady(){player=new YT.Player('yt-player',{height:'1',width:'1',videoId:'',playerVars:{playsinline:1},events:{onReady:()=>{player.setVolume(80);},onStateChange:e=>{updateIcon(e.data==1);if(e.data==0)next();}}});renderChips();}
+function updateIcon(p){const ic=p?'<path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/>':'<path d="M8 5.14v14l11-7z"/>';document.getElementById('playIcon').innerHTML=ic;document.getElementById('fullPlayIcon').innerHTML=ic;}
+function renderSearch(items){cacheResults=items;resultEl.innerHTML='';items.forEach((s,i)=>{const d=document.createElement('div');d.className='song';d.innerHTML=`<img loading="lazy" src="https://img.youtube.com/vi/${s.id}/mqdefault.jpg"><div class="info"><b>${s.title}</b><span>${s.ch}</span></div><button class="more" data-more="${i}" data-from="search"><svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="1.5"/><circle cx="19.5" cy="12" r="1.5"/><circle cx="4.5" cy="12" r="1.5"/></svg></button>`;d.addEventListener('click',(e)=>{if(e.target.closest('.more'))return;playQueue=cacheResults;idx=i;playFromQueue();});resultEl.appendChild(d);});document.getElementById('playlistChips').style.display='none';}
+function renderQueue(){const pl=getActive();resultEl.innerHTML='';if(!pl.songs.length)resultEl.innerHTML=`<div style="text-align:center;color:#555;padding:40px">Playlist ${pl.name} kosong</div>`;else pl.songs.forEach((s,i)=>{const d=document.createElement('div');d.className='song';d.innerHTML=`<img src="https://img.youtube.com/vi/${s.id}/mqdefault.jpg"><div class="info"><b>${s.title}</b><span>${s.ch}</span></div><button class="more" data-more="${i}" data-from="queue"><svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="1.5"/><circle cx="19.5" cy="12" r="1.5"/><circle cx="4.5" cy="12" r="1.5"/></svg></button>`;d.addEventListener('click',(e)=>{if(e.target.closest('.more'))return;playQueue=pl.songs;idx=i;playFromQueue();});resultEl.appendChild(d);});document.getElementById('playlistChips').style.display='flex';renderChips();}
+resultEl.addEventListener('click',e=>{const btn=e.target.closest('.more');if(!btn)return;const i=+btn.dataset.more;const from=btn.dataset.from;moreFrom=from;moreIndex=i;moreSong=from==='search'?cacheResults[i]:getActive().songs[i];document.getElementById('moreCover').src=`https://img.youtube.com/vi/${moreSong.id}/mqdefault.jpg`;document.getElementById('moreTitle').textContent=moreSong.title;document.getElementById('moreCh').textContent=moreSong.ch;document.getElementById('actionDelete').style.display=from==='queue'?'flex':'none';document.getElementById('moreModal').classList.add('show');});
 document.getElementById('actionPlay').onclick=()=>{document.getElementById('moreModal').classList.remove('show');playQueue=moreFrom==='search'?cacheResults:getActive().songs;idx=moreIndex;playFromQueue();};
 document.getElementById('actionAdd').onclick=()=>{document.getElementById('moreModal').classList.remove('show');showPlaylistPicker();};
 document.getElementById('actionDelete').onclick=()=>{getActive().songs.splice(moreIndex,1);save();renderQueue();document.getElementById('moreModal').classList.remove('show');};
 function showPlaylistPicker(){const opt=document.getElementById('playlistOptions');opt.innerHTML='';playlists.forEach(pl=>{if(pl.id==='liked')return;const d=document.createElement('div');d.className='playlist-option';d.innerHTML=`<span>${pl.name}</span><span>${pl.songs.length}</span>`;d.onclick=()=>{if(!pl.songs.some(s=>s.id===moreSong.id))pl.songs.push(moreSong);save();renderChips();document.getElementById('playlistModal').classList.remove('show');if(activePlaylistId===pl.id)renderQueue();};opt.appendChild(d);});document.getElementById('playlistModal').classList.add('show');}
 document.getElementById('closePlaylistModal').onclick=()=>document.getElementById('playlistModal').classList.remove('show');
-document.getElementById('createPlaylist').onclick=()=>{const name=document.getElementById('newName').value.trim();if(!name)return;const id=Date.now().toString();playlists.push({id,name,songs:[]});activePlaylistId=id;save();renderChips();renderQueue();document.getElementById('newName').value='';document.getElementById('newModal').classList.remove('show');document.getElementById('newModal').style.display='none';};
+document.getElementById('newPlaylistBtn').onclick=()=>{document.getElementById('newModal').classList.add('show');document.getElementById('newModal').style.display='grid';setTimeout(()=>document.getElementById('newName').focus(),100);};
 document.getElementById('closeNew').onclick=()=>{document.getElementById('newModal').classList.remove('show');document.getElementById('newModal').style.display='none';};
 document.getElementById('newModal').onclick=e=>{if(e.target.id==='newModal'){e.target.classList.remove('show');e.target.style.display='none';}};
-function playFromQueue(){const s=playQueue[idx];currentSong=s;document.getElementById('title').textContent=s.title;document.getElementById('ch').textContent=s.ch;document.getElementById('cover').src=`https://img.youtube.com/vi/${s.id}/mqdefault.jpg`;document.getElementById('fullTitle').textContent=s.title;document.getElementById('fullCh').textContent=s.ch;document.getElementById('fullCover').src=`https://img.youtube.com/vi/${s.id}/mqdefault.jpg`;if(player&&player.loadVideoById)player.loadVideoById(s.id);}
+document.getElementById('createPlaylist').onclick=()=>{const name=document.getElementById('newName').value.trim();if(!name)return;const id=Date.now().toString();playlists.push({id,name,songs:[]});activePlaylistId=id;save();renderChips();renderQueue();document.getElementById('newName').value='';document.getElementById('newModal').classList.remove('show');document.getElementById('newModal').style.display='none';tab='queue';document.querySelectorAll('.tabs button').forEach(x=>x.classList.remove('active'));document.querySelector('[data-tab=queue]').classList.add('active');};
+function playFromQueue(){const s=playQueue[idx];currentSong=s;document.getElementById('title').textContent=s.title;document.getElementById('ch').textContent=s.ch;document.getElementById('cover').src=`https://img.youtube.com/vi/${s.id}/mqdefault.jpg`;document.getElementById('fullTitle').textContent=s.title;document.getElementById('fullCh').textContent=s.ch;document.getElementById('fullCover').src=`https://img.youtube.com/vi/${s.id}/mqdefault.jpg`;document.getElementById('fullBg').style.background=`url(https://img.youtube.com/vi/${s.id}/mqdefault.jpg) center/cover`;if(player&&player.loadVideoById)player.loadVideoById(s.id);}
 function next(){if(playQueue.length){idx=(idx+1)%playQueue.length;playFromQueue();}}
 function prev(){if(playQueue.length){idx=(idx-1+playQueue.length)%playQueue.length;playFromQueue();}}
 document.getElementById('next').onclick=next;document.getElementById('prev').onclick=prev;
+document.getElementById('fullNext').onclick=next;document.getElementById('fullPrev').onclick=prev;
 document.getElementById('play').onclick=()=>{if(!player)return;const st=player.getPlayerState();if(st==1)player.pauseVideo();else player.playVideo();};
-async function search(q){if(!q)return;resultEl.innerHTML='<div style="padding:20px;color:#888">Searching...</div>';try{const res=await fetch(`https://www.googleapis.com/youtube/v3/search?part=snippet&type=video&maxResults=10&q=${encodeURIComponent(q)}&key=${API_KEY}`);const data=await res.json();if(data.error)throw new Error(data.error.message);const items=data.items.map(it=>({id:it.id.videoId,title:it.snippet.title,ch:it.snippet.channelTitle}));renderSearch(items);tab='search';document.querySelectorAll('.tabs button').forEach(b=>b.classList.remove('active'));document.querySelector('[data-tab=search]').classList.add('active');}catch(e){resultEl.innerHTML=`<div style="color:#ff5a5a;padding:20px">Error: ${e.message}<br>API Key atau restrictions salah</div>`;}}
+document.getElementById('fullPlay').onclick=()=>{if(!player)return;const st=player.getPlayerState();if(st==1)player.pauseVideo();else player.playVideo();};
+async function search(q){if(!q)return;resultEl.innerHTML='<div style="padding:20px;color:#888">Searching...</div>';try{const res=await fetch(`https://www.googleapis.com/youtube/v3/search?part=snippet&type=video&maxResults=10&q=${encodeURIComponent(q)}&key=${API_KEY}`);const data=await res.json();if(data.error)throw new Error(data.error.message);const items=data.items.map(it=>({id:it.id.videoId,title:it.snippet.title,ch:it.snippet.channelTitle}));renderSearch(items);tab='search';document.querySelectorAll('.tabs button').forEach(b=>b.classList.remove('active'));document.querySelector('[data-tab=search]').classList.add('active');}catch(e){resultEl.innerHTML=`<div style="color:#ff5a5a;padding:20px">Error: ${e.message}</div>`;}}
 document.getElementById('go').onclick=()=>search(document.getElementById('q').value);
 document.getElementById('q').addEventListener('keydown',e=>{if(e.key==='Enter')search(e.target.value);});
 document.querySelectorAll('.tabs button').forEach(btn=>{btn.onclick=()=>{document.querySelectorAll('.tabs button').forEach(b=>b.classList.remove('active'));btn.classList.add('active');tab=btn.dataset.tab;if(tab==='search'){if(cacheResults.length)renderSearch(cacheResults);else resultEl.innerHTML='<div style="padding:20px;color:#555">Cari dulu</div>';}else renderQueue();};});
 document.getElementById('miniPlayer').onclick=()=>document.getElementById('fullPlayer').classList.add('show');
 document.getElementById('closeFull').onclick=()=>document.getElementById('fullPlayer').classList.remove('show');
-// END FILE vFINAL-11 - kalau lu liat ini berarti file gak kepotong
-console.log('vFINAL-11 loaded, plus button should work');
 </script>
 </body>
-</html>
+  </html>

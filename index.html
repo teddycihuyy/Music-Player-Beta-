@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Music</title>
+<style>
+:root{--bg:#070707;--card:#141414;--accent:#ff2a6d;--text:#fff;--muted:#888}
+*{box-sizing:border-box;margin:0;padding:0;font-family:Inter,sans-serif;-webkit-tap-highlight-color:transparent}
+body{background:var(--bg);color:var(--text);display:flex;justify-content:center}
+.phone{width:100%;max-width:420px;min-height:100dvh;background:var(--bg);display:flex;flex-direction:column}
+.header{padding:20px 16px 10px;display:flex;justify-content:space-between;align-items:center}
+.header b{font-size:22px;font-weight:800}
+.icon-btn{width:38px;height:38px;border-radius:12px;border:1px solid #222;background:#141414;display:grid;place-items:center;color:#fff}
+.search{padding:8px 16px 10px;position:sticky;top:0;background:var(--bg);z-index:10}
+.search-box{display:flex;gap:10px;background:#141414;border:1px solid #222;border-radius:16px;padding:14px 16px}
+.search-box input{flex:1;background:transparent;border:0;color:#fff;outline:none;font-size:14px}
+.main{flex:1;overflow:auto;padding:0 16px 150px}
+.tabs{display:flex;gap:8px;margin:12px 0}
+.tabs button{padding:9px 16px;border-radius:22px;border:1px solid #2a2a2a;background:#111;color:#888;font-size:13px;font-weight:600}
+.tabs button.active{background:#fff;color:#000}
+.playlist-chips{display:flex;gap:8px;margin:8px 0 12px;overflow-x:auto;padding-bottom:4px}
+.chip{padding:8px 14px;border-radius:20px;background:#1a1a1a;border:1px solid #333;color:#ccc;font-size:12px;white-space:nowrap;display:flex;align-items:center;gap:6px}
+.chip.active{background:var(--accent);border-color:var(--accent);color:#fff}
+.list{display:grid;gap:10px}
+.song{display:flex;gap:12px;padding:12px;border-radius:18px;background:var(--card);border:1px solid transparent;align-items:center}
+.song.active{border-color:var(--accent);background:#22111a}
+.song img{width:56px;height:56px;border-radius:14px;background:#222;flex-shrink:0}
+.song .info{flex:1;min-width:0}
+.song b{font-size:13px;line-height:1.3;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.song span{font-size:11px;color:var(--muted);margin-top:3px;display:block}
+.song .more{width:32px;height:32px;border-radius:50%;background:transparent;border:0;color:#888;display:grid;place-items:center}
+.player-bar{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:420px;background:rgba(18,18,18,0.98);backdrop-filter:blur(24px);border-top:1px solid #222;padding:12px 16px 18px;border-radius:24px 24px 0 0;z-index:20}
+.mini-top{display:flex;gap:12px;align-items:center;cursor:pointer}
+.mini-cover{width:48px;height:48px;border-radius:12px;overflow:hidden;background:#000}
+.mini-cover img{width:100%;height:100%;object-fit:cover}
+.heart-btn{width:36px;height:36px;border-radius:50%;border:0;background:transparent;display:grid;place-items:center;color:#888;transition:.2s}
+.heart-btn.liked{color:var(--accent)} .heart-btn.liked svg{fill:var(--accent)}
+#seek{width:100%;height:4px;accent-color:var(--accent);margin-top:12px}
+.controls{display:flex;justify-content:space-between;align-items:center;margin-top:12px;padding:0 20px}
+.controls button{width:44px;height:44px;border-radius:50%;border:0;background:transparent;color:#fff;display:grid;place-items:center}
+.controls button.play{width:58px;height:58px;background:var(--accent)}
+#fullPlayer{position:fixed;inset:0;z-index:100;display:flex;flex-direction:column;transform:translateY(100%);transition:transform .4s;max-width:420px;left:50%;transform:translateX(-50%) translateY(100%);overflow:hidden}
+#fullPlayer.show{transform:translateX(-50%) translateY(0)}
+#fullBg{position:absolute;inset:0;z-index:-1;filter:blur(60px) brightness(.6);transform:scale(1.5)}
+.full-top{padding:20px 16px;display:flex;justify-content:space-between;align-items:center}
+.full-cover{margin:10px 20px;aspect-ratio:1;border-radius:28px;overflow:hidden;background:#111}
+.full-cover img{width:100%;height:100%;object-fit:cover}
+.full-info{display:flex;justify-content:space-between;align-items:center;padding:0 24px;margin-top:14px}
+.full-lyrics{flex:1;overflow:auto;margin:16px 16px 0;background:rgba(0,0,0,.35);backdrop-filter:blur(20px);border-radius:20px;padding:16px;border:1px solid rgba(255,255,255,.1)}
+.full-lyrics pre{white-space:pre-wrap;font-size:14px;line-height:1.8;color:#eee;font-family:Inter,sans-serif}
+.modal{position:fixed;inset:0;background:rgba(0,0,0,.85);z-index:200;display:none;place-items:end center}
+.modal.show{display:grid}
+.sheet{width:100%;max-width:420px;background:#181818;border-radius:28px 28px 0 0;padding:20px 16px 30px;border-top:1px solid #333}
+.sheet-item{padding:14px 12px;border-radius:12px;display:flex;gap:12px;align-items:center;background:transparent;border:0;color:#fff;width:100%;text-align:left;font-size:14px}
+.box{width:100%;max-width:360px;background:#111;border:1px solid #333;border-radius:20px;padding:18px}
+.box input{width:100%;background:#1a1a1a;border:1px solid #333;border-radius:10px;padding:12px;color:#fff;margin:10px 0}
+.box .btn{width:100%;padding:12px;border-radius:12px;border:0;background:var(--accent);color:#fff;font-weight:700;margin-top:8px}
+.playlist-option{padding:12px;border-radius:12px;background:#1a1a1a;border:1px solid #333;margin-bottom:8px;display:flex;justify-content:space-between;align-items:center}
+</style>
+</head>
+<body>
+<div class="phone">
+<div class="header"><b>Music</b><button class="icon-btn" id="newPlaylistBtn"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg></button></div>
+<div class="search"><div class="search-box"><input id="q" placeholder="Cari lagu..."><button id="go" style="background:var(--accent);border:0;color:#fff;font-weight:700;padding:7px 14px;border-radius:10px">GO</button></div></div>
+<div class="main"><div class="tabs"><button class="active" data-tab="search">Search</button><button data-tab="queue">Playlist</button></div><div id="playlistChips" class="playlist-chips" style="display:none"></div><div class="list" id="result"></div></div>
+<div class="player-bar"><div class="mini-top" id="miniPlayer"><div class="mini-cover"><img id="cover"></div><div style="flex:1;min-width:0"><h3 id="title" style="font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Music</h3><p id="ch" style="font-size:11px;color:#888">Cari lagu untuk play</p></div><button class="heart-btn" id="miniHeart"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg></button></div><input type="range" id="seek" min="0" max="100" value="0"><div class="controls"><button id="prev"><svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M6 6h2v12H6zM9.5 12 18 6v12z"/></svg></button><button class="play" id="play"><svg id="playIcon" width="26" height="26" viewBox="0 0 24 24" fill="white"><path d="M8 5.14v14l11-7z"/></svg></button><button id="next"><svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M16 6h2v12h-2zM6 6v12l8.5-6z"/></svg></button></div></div>
+</div>
+<div id="fullPlayer"><div id="fullBg"></div><div class="full-top"><button id="closeFull" class="icon-btn"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m6 9 6 6 6-6"/></svg></button><b>Now Playing</b><div style="width:38px"></div></div><div class="full-cover"><img id="fullCover"></div><div class="full-info"><div><h2 id="fullTitle" style="font-size:20px">Music</h2><p id="fullCh" style="font-size:13px;color:rgba(255,255,255,.7)">-</p></div><button class="heart-btn" id="fullHeart" style="width:48px;height:48px;background:rgba(255,255,255,.1);border-radius:50%"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg></button></div><div class="full-lyrics"><pre id="fullLyrics">Cari lagu dulu...</pre></div><div style="padding:16px 24px 30px"><input type="range" id="fullSeek" min="0" max="100" value="0" style="width:100%;accent-color:var(--accent)"><div class="controls"><button id="fullPrev"><svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M6 6h2v12H6zM9.5 12 18 6v12z"/></svg></button><button class="play" id="fullPlay"><svg id="fullPlayIcon" width="26" height="26" viewBox="0 0 24 24" fill="white"><path d="M8 5.14v14l11-7z"/></svg></button><button id="fullNext"><svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M16 6h2v12h-2zM6 6v12l8.5-6z"/></svg></button></div></div></div>
+<div class="modal" id="moreModal"><div class="sheet"><div style="width:40px;height:4px;background:#333;border-radius:10px;margin:0 auto 16px"></div><div style="display:flex;gap:12px;margin-bottom:16px"><img id="moreCover" style="width:52px;height:52px;border-radius:12px"><div><b id="moreTitle" style="font-size:14px"></b><p id="moreCh" style="font-size:11px;color:#888"></p></div></div><button class="sheet-item" id="actionPlay"><svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5.14v14l11-7z"/></svg> Putar Sekarang</button><button class="sheet-item" id="actionAdd"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg> Tambah ke Playlist</button><button class="sheet-item" id="actionLike"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg> Suka / Favorite</button><button class="sheet-item" id="actionDelete" style="color:#ff5a5a;display:none"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg> Hapus dari Playlist</button></div></div>
+<div class="modal" id="playlistModal"><div class="sheet"><div style="width:40px;height:4px;background:#333;border-radius:10px;margin:0 auto 16px"></div><h3 style="margin-bottom:12px">Pilih Playlist</h3><div id="playlistOptions"></div><button class="sheet-item" id="closePlaylistModal" style="color:#888"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6 6 18M6 6l12 12"/></svg> Batal</button></div></div>
+<div class="modal" id="newModal" style="place-items:center"><div class="box"><h3>Buat Playlist Baru</h3><input id="newName" placeholder="Ex: Galau, Workout"><button class="btn" id="createPlaylist">Buat</button><button class="btn" id="closeNew" style="background:#222">Batal</button></div></div>
+<div id="yt-player" style="position:absolute;left:-9999px;width:1px;height:1px;opacity:0"></div>
+<script src="https://www.youtube.com/iframe_api"></script>
+<script>
+const API_KEY='AIzaSyCuKx7zWsOGiyegFVsS35Yr77NYtLgyY34'; // GANTI DISINI JIKA PUNYA
+let player,idx=0,tab='search',cacheResults=[],moreSong=null,moreIndex=null,moreFrom='search',currentSong=null;
+let playQueue=[];
+let playlists=JSON.parse(localStorage.getItem('playlists')||'null') || [{id:'default',name:'My Favorites',songs:[]},{id:'liked',name:'Liked Songs',songs:[]}];
+let activePlaylistId=localStorage.getItem('activePlaylistId')||'default';
+if(!playlists.find(p=>p.id===activePlaylistId)) activePlaylistId=playlists[0].id;
+const resultEl=document.getElementById('result');
+function save(){localStorage.setItem('playlists',JSON.stringify(playlists));localStorage.setItem('activePlaylistId',activePlaylistId);}
+function getActive(){return playlists.find(p=>p.id===activePlaylistId)||playlists[0];}
+function isLiked(id){return playlists.find(p=>p.id==='liked').songs.some(s=>s.id===id);}
+function toggleLike(song){const liked=playlists.find(p=>p.id==='liked');const i=liked.songs.findIndex(s=>s.id===song.id);if(i>=0)liked.songs.splice(i,1);else liked.songs.push(song);save();updateHeartUI();renderChips();}
+function updateHeartUI(){if(!currentSong){document.getElementById('miniHeart').classList.remove('liked');document.getElementById('fullHeart').classList.remove('liked');return;}const liked=isLiked(currentSong.id);document.getElementById('miniHeart').classList.toggle('liked',liked);document.getElementById('fullHeart').classList.toggle('liked',liked);}
+function onYouTubeIframeAPIReady(){player=new YT.Player('yt-player',{width:'1',height:'1',videoId:'',playerVars:{playsinline:1},events:{onReady:()=>player.setVolume(80),onStateChange:e=>{updateIcon(e.data==1);if(e.data==0)next();}}});renderChips();}
+function updateIcon(p){const ic=p?'<path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/>':'<path d="M8 5.14v14l11-7z"/>';document.getElementById('playIcon').innerHTML=ic;document.getElementById('fullPlayIcon').innerHTML=ic;}
+function renderChips(){const c=document.getElementById('playlistChips');c.innerHTML='';playlists.forEach(pl=>{const d=document.createElement('div');d.className='chip'+(pl.id===activePlaylistId?' active':'');const isLikedChip=pl.id==='liked';d.innerHTML=(isLikedChip?`<svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>`:'')+pl.name+' ('+pl.songs.length+')';d.onclick=()=>{activePlaylistId=pl.id;save();renderChips();if(tab==='queue')renderQueue();};c.appendChild(d);});}
+function renderSearch(items){cacheResults=items;resultEl.innerHTML='';const frag=document.createDocumentFragment();items.forEach((s,i)=>{const d=document.createElement('div');d.className='song';d.dataset.i=i;d.dataset.t='s';d.innerHTML=`<img loading="lazy" src="https://img.youtube.com/vi/${s.id}/mqdefault.jpg"><div class="info"><b>${s.title}</b><span>${s.ch}</span></div><button class="more" data-more="${i}" data-from="search"><svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="1.5"/><circle cx="19.5" cy="12" r="1.5"/><circle cx="4.5" cy="12" r="1.5"/></svg></button>`;frag.appendChild(d);});resultEl.appendChild(frag);document.getElementById('playlistChips').style.display='none';}
+function renderQueue(){const pl=getActive();resultEl.innerHTML='';if(!pl.songs.length){resultEl.innerHTML=`<div style="text-align:center;color:#555;padding:40px 0">Playlist ${pl.name} kosong</div>`;}else{const frag=document.createDocumentFragment();pl.songs.forEach((s,i)=>{const d=document.createElement('div');d.className='song'+(playQueue===pl.songs&&i==idx?' active':'');d.dataset.i=i;d.dataset.t='q';d.innerHTML=`<img src="https://img.youtube.com/vi/${s.id}/mqdefault.jpg"><div class="info"><b>${s.title}</b><span>${s.ch}</span></div><button class="more" data-more="${i}" data-from="queue"><svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="1.5"/><circle cx="19.5" cy="12" r="1.5"/><circle cx="4.5" cy="12" r="1.5"/></svg></button>`;frag.appendChild(d);});resultEl.appendChild(frag);}document.getElementById('playlistChips').style.display='flex';renderChips();}
+resultEl.addEventListener('click',e=>{if(e.target.closest('.more')){const btn=e.target.closest('.more');const i=+btn.dataset.more;const from=btn.dataset.from;moreFrom=from;moreIndex=i;moreSong=from==='search'?cacheResults[i]:getActive().songs[i];document.getElementById('moreCover').src=`https://img.youtube.com/vi/${moreSong.id}/mqdefault.jpg`;document.getElementById('moreTitle').textContent=moreSong.title;document.getElementById('moreCh').textContent=moreSong.ch;document.getElementById('actionDelete').style.display=from==='queue'?'flex':'none';document.getElementById('moreModal').classList.add('show');return;}const el=e.target.closest('.song');if(!el)return;const i=+el.dataset.i;if(el.dataset.t==='s'){playQueue=cacheResults;idx=i;playFromQueue();}else{playQueue=getActive().songs;idx=i;playFromQueue();}});
+document.getElementById('actionPlay').onclick=()=>{document.getElementById('moreModal').classList.remove('show');if(moreFrom==='search'){playQueue=cacheResults;idx=moreIndex;playFromQueue();}else{playQueue=getActive().songs;idx=moreIndex;playFromQueue();}};
+document.getElementById('actionAdd').onclick=()=>{document.getElementById('moreModal').classList.remove('show');showPlaylistPicker();};
+document.getElementById('actionLike').onclick=()=>{toggleLike(moreSong);document.getElementById('moreModal').classList.remove('show');};
+document.getElementById('actionDelete').onclick=()=>{const pl=getActive();pl.songs.splice(moreIndex,1);save();renderQueue();document.getElementById('moreModal').classList.remove('show');};
+function showPlaylistPicker(){const opt=document.getElementById('playlistOptions');opt.innerHTML='';playlists.forEach(pl=>{if(pl.id==='liked')return;const d=document.createElement('div');d.className='playlist-option';d.innerHTML=`<span>${pl.name}</span><span style="color:#888">${pl.songs.length}</span>`;d.onclick=()=>{if(pl.songs.some(s=>s.id===moreSong.id))alert('Udah ada di '+pl.name);else{pl.songs.push(moreSong);save();renderChips();if(pl.id===activePlaylistId)renderQueue();}document.getElementById('playlistModal').classList.remove('show');};opt.appendChild(d);});document.getElementById('playlistModal').classList.add('show');}
+document.getElementById('newPlaylistBtn').onclick=()=>document.getElementById('newModal').classList.add('show');
+document.getElementById('closeNew').onclick=()=>document.getElementById('newModal').classList.remove('show');
+document.getElementById('closePlaylistModal').onclick=()=>document.getElementById('playlistModal').classList.remove('show');
+document.getElementById('createPlaylist').onclick=()=>{const name=document.getElementById('newName').value.trim();if(!name)return;const id=Date.now().toString();playlists.push({id,name,songs:[]});activePlaylistId=id;save();renderChips();renderQueue();document.getElementById('newName').value='';document.getElementById('newModal').classList.remove('show');tab='queue';document.querySelectorAll('.tabs button').forEach(x=>x.classList.remove('active'));document.querySelectorAll('.tabs button')[1].classList.add('active');};
+document.getElementById('moreModal').onclick=e=>{if(e.target.id==='moreModal')e.target.classList.remove('show');};
+document.getElementById('playlistModal').onclick=e=>{if(e.target.id==='playlistModal')e.target.classList.remove('show');};
+document.getElementById('miniHeart').onclick=e=>{e.stopPropagation();if(currentSong)toggleLike(currentSong);};
+document.getElementById('fullHeart').onclick=()=>{if(currentSong)toggleLike(currentSong);};
+function setBlurFromImage(url){const img=new Image();img.crossOrigin='anonymous';img.src=url;img.onload=()=>{const c=document.createElement('canvas');c.width=10;c.height=10;const ctx=c.getContext('2d');ctx.drawImage(img,0,0,10,10);const d=ctx.getImageData(0,0,10,10).data;let r=0,g=0,b=0;for(let i=0;i<d.length;i+=4){r+=d[i];g+=d[i+1];b+=d[i+2];}r=Math.floor(r/100);g=Math.floor(g/100);b=Math.floor(b/100);document.getElementById('fullBg').style.background=`radial-gradient(circle at 50% 0%, rgb(${r},${g},${b}) 0%, #070707 75%)`; };}
+async function fetchLyrics(t){document.getElementById('fullLyrics').textContent='Mencari lirik...';try{const clean=t.replace(/\(.*\)|\[.*\]/g,'').trim();const r=await fetch(`https://api.lyrics.ovh/v1/${encodeURIComponent(clean.split('-')[0]||'tulus')}/${encodeURIComponent(clean.split('-')[1]||clean)}`);const j=await r.json();document.getElementById('fullLyrics').textContent=j.lyrics||'Lirik tidak ditemukan';}catch{document.getElementById('ful

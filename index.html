@@ -70,6 +70,10 @@ body{background:var(--bg);color:var(--text);display:flex;justify-content:center}
 .box .btn{width:100%;padding:12px;border-radius:12px;border:0;background:var(--accent);color:#fff;font-weight:700;margin-top:8px;cursor:pointer}
 .playlist-option{padding:12px;border-radius:12px;background:#1a1a1a;border:1px solid #333;margin-bottom:8px;display:flex;justify-content:space-between;align-items:center;cursor:pointer}
 #adBar{display:none;position:fixed;bottom:92px;left:50%;transform:translateX(-50%);width:90%;max-width:380px;background:#ffcc00;color:#000;padding:10px 14px;border-radius:14px;z-index:25;justify-content:space-between;align-items:center;font-weight:700;font-size:13px}
+#miniLike, .like, .like-btn{background: rgba(255,255,255,0.08) !important;border: 1px solid rgba(255,255,255,0.12) !important;color: #fff !important;border-radius: 50% !important;width: 44px !important;height: 44px !important;display: grid !important;place-items: center !important;flex-shrink: 0}
+#miniLike svg, .like svg, .like-btn svg{width: 22px !important;height: 22px !important;display: block !important;fill: none;stroke: currentColor;stroke-width: 2}
+#miniLike.liked, .like.liked, .like-btn.liked{background: #ff2a6d !important;border-color: #ff2a6d !important;color: #fff !important}
+#miniLike.liked svg, .like.liked svg, .like-btn.liked svg{fill: #fff !important;stroke: #fff !important}
 </style>
 </head>
 <body>
